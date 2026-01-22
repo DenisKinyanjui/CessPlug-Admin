@@ -1,0 +1,10 @@
+colors
+
+Primary : FEBA2B
+Secondary : F86718
+3rd Color : 8F33B3
+
+light version
+Primary : FFF8EB
+Secondary : FFE8DB
+3rd Color : F5DDFF
