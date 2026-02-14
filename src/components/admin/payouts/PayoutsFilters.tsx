@@ -20,6 +20,19 @@ const PayoutsFilters: React.FC<PayoutsFiltersProps> = ({ filters, onFiltersChang
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Advanced Filters</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Payout Source</label>
+          <select
+            value={filters.payoutSource || ''}
+            onChange={(e) => updateFilter('payoutSource', e.target.value || undefined)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">All Sources</option>
+            <option value="agent">Agent Commissions</option>
+            <option value="chama">Chama Payouts</option>
+          </select>
+        </div>
+
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
           <select
             value={filters.status || ''}

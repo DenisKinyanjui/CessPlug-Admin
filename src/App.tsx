@@ -26,8 +26,13 @@ import UsersPage from "./pages/admin/users/index";
 import UserDetailPage from "./pages/admin/users/[id]";
 import BannersPage from "./pages/admin/banners/index";
 import CreateBannerPage from "./pages/admin/banners/create";
-import AgentManagement from "./pages/admin/agents/AgentManagement";
-import ViewAgentDetails from "./pages/admin/agents/ViewAgentDetails";
+import ChamaManagement from "./pages/admin/chamas/index";
+import CreateChama from "./pages/admin/chamas/create";
+import ChamaDetailPage from "./pages/admin/chamas/[id]";
+import EditChama from "./pages/admin/chamas/edit";
+import ChamaMembersManagement from "./pages/admin/chamas/members";
+import ChamaContributionsManagement from "./pages/admin/chamas/contributions";
+import ChamaPayoutsManagement from "./pages/admin/chamas/payouts";
 import AdminReviewsManagement from "./pages/admin/reviews/index";
 import PayoutsManagement from "./pages/admin/payouts/PayoutsManagement";
 import SettingsPage from "./pages/admin/settings";
@@ -229,22 +234,77 @@ function App() {
           />
 
           <Route
-            path="/admin/agents"
+            path="/admin/chamas"
             element={
               <ProtectedAdminRoute>
                 <AdminLayout>
-                  <AgentManagement />
+                  <ChamaManagement />
                 </AdminLayout>
               </ProtectedAdminRoute>
             }
           />
 
           <Route
-            path="/admin/agents/:id"
+            path="/admin/chamas/create"
             element={
               <ProtectedAdminRoute>
                 <AdminLayout>
-                  <ViewAgentDetails />
+                  <CreateChama />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/chamas/:id"
+            element={
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <ChamaDetailPage />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/chamas/:id/edit"
+            element={
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <EditChama />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/chamas/:id/members"
+            element={
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <ChamaMembersManagement />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/chamas/:id/contributions"
+            element={
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <ChamaContributionsManagement />
+                </AdminLayout>
+              </ProtectedAdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/chamas/:id/payouts"
+            element={
+              <ProtectedAdminRoute>
+                <AdminLayout>
+                  <ChamaPayoutsManagement />
                 </AdminLayout>
               </ProtectedAdminRoute>
             }
@@ -282,6 +342,9 @@ function App() {
               </ProtectedAdminRoute>
             }
           />
+
+          {/* Catch-all route */}
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       </Router>
     </AdminProvider>

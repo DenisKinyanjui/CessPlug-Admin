@@ -123,7 +123,10 @@ const PayoutsTable: React.FC<PayoutsTableProps> = ({
                 />
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Agent
+                Recipient
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Source
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Amount
@@ -195,13 +198,26 @@ const PayoutsTable: React.FC<PayoutsTableProps> = ({
                       </div>
                       <div className="ml-3">
                         <div className="text-sm font-medium text-gray-900">
-                          {payout.agentId.name}
+                          {payout.payoutSource === 'chama' && payout.chamaId
+                            ? payout.chamaId.name
+                            : payout.agentId?.name || 'Unknown'}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {payout.agentId.email}
+                          {payout.payoutSource === 'chama' && payout.chamaId
+                            ? `Week ${payout.chamaId.weekNumber || '-'}`
+                            : payout.agentId?.email || '-'}
                         </div>
                       </div>
                     </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      payout.payoutSource === 'chama' 
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'bg-orange-100 text-orange-800'
+                    }`}>
+                      {payout.payoutSource === 'chama' ? '👥 Chama' : '🚚 Agent'}
+                    </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm font-semibold text-gray-900">

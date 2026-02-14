@@ -13,8 +13,20 @@ export interface User {
     country?: string;
   };
   isActive?: boolean;
+  chamaMemberships?: ChamaMembership[]; // New: Track chama group memberships
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ChamaMembership {
+  chamaId: string;
+  chamaName: string;
+  joinedAt: string;
+  position?: 'leader' | 'treasurer' | 'member';
+  contributionsPaid?: number;
+  totalContributions?: number;
+  status?: 'active' | 'inactive';
+  paidWeeks?: number[];
 }
 
 export interface FrontendUser {
@@ -31,6 +43,7 @@ export interface FrontendUser {
     zipCode?: string;
     country?: string;
   };
+  chamaMemberships?: ChamaMembership[]; // New: Include chama info
   status: 'active' | 'inactive';
   createdAt: string;
   updatedAt?: string;
@@ -44,6 +57,7 @@ export const mapApiUserToFrontend = (apiUser: User): FrontendUser => ({
   avatar: apiUser.avatar,
   phone: apiUser.phone,
   address: apiUser.address,
+  chamaMemberships: apiUser.chamaMemberships, // New: Include chama memberships
   status: apiUser.isActive ? 'active' : 'inactive',
   createdAt: apiUser.createdAt,
   updatedAt: apiUser.updatedAt

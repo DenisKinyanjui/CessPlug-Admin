@@ -4,10 +4,10 @@ import { Save, Bell, Shield, Globe, Mail, Database, Palette } from 'lucide-react
 const SettingsPage: React.FC = () => {
   const [settings, setSettings] = useState({
     // General Settings
-    siteName: 'Vinsky Shopping',
+    siteName: 'CessPlug',
     siteDescription: 'Your one-stop shop for everything',
-    contactEmail: 'contact@vinsky.com',
-    supportEmail: 'support@vinsky.com',
+    contactEmail: 'contact@cessplug.com',
+    supportEmail: 'support@cessplug.com',
     
     // Notification Settings
     emailNotifications: true,
@@ -32,8 +32,8 @@ const SettingsPage: React.FC = () => {
     defaultShippingCost: 9.99,
     
     // SEO Settings
-    metaTitle: 'Vinsky Shopping - Online Store',
-    metaDescription: 'Shop the latest products at Vinsky Shopping',
+    metaTitle: 'CessPlug - Online Store',
+    metaDescription: 'Shop the latest products at CessPlug',
     metaKeywords: 'shopping, online store, products'
   });
 

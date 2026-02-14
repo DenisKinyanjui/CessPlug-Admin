@@ -13,8 +13,8 @@ import {
   Menu,
   X,
   User,
-  UserCheck,
-  Wallet, // New icon for payouts
+  Wallet,
+  PiggyBank, // New icon for Chama
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -31,9 +31,8 @@ const Sidebar: React.FC = () => {
     { to: "/admin/brands", icon: Tag, label: "Brands" },
     { to: "/admin/orders", icon: ShoppingCart, label: "Orders" },
     { to: "/admin/users", icon: Users, label: "Users" },
-    { to: "/admin/agents", icon: UserCheck, label: "Agents" },
-    { to: "/admin/payouts", icon: Wallet, label: "Payouts" }, // New payouts route
-    // { to: '/admin/reviews', icon: Star, label: 'Reviews'},
+    { to: "/admin/chamas", icon: PiggyBank, label: "Chama Groups" },
+    { to: "/admin/payouts", icon: Wallet, label: "Payouts" },
     { to: "/admin/settings", icon: Settings, label: "Settings" },
   ];
 
@@ -57,7 +56,7 @@ const Sidebar: React.FC = () => {
       >
         <div className="p-6">
           <div className="flex items-center space-x-2">
-            <h1 className="text-xl font-bold ml-8 sm:ml-0">Vinsky Admin</h1>
+            <h1 className="text-xl font-bold ml-8 sm:ml-0">CessPlug Admin</h1>
           </div>
           <div className="flex flex-row gap-2 text-gray-200 mt-2">
             <User className="h-auto" />

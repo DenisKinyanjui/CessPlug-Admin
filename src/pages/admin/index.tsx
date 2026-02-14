@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Package, ShoppingCart, AlertCircle, RefreshCw } from "lucide-react";
+import { Package, ShoppingCart, AlertCircle, RefreshCw, PiggyBank, Users } from "lucide-react";
 import StatsCards from "../../components/admin/StatsCards";
 import { getAllOrders, getProductSalesStats } from "../../services/adminApi";
+import { getChamaStats } from "../../services/chamaApi";
 import { Order } from "../../types/Order";
 
 interface RecentOrder {
@@ -25,6 +26,7 @@ interface TopProduct {
 const AdminDashboard: React.FC = () => {
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
+  const [chamaStats, setChamaStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -65,6 +67,15 @@ const AdminDashboard: React.FC = () => {
             image: product.images?.[0],
           }))
         );
+      }
+
+      // Fetch Chama stats
+      try {
+        const stats = await getChamaStats();
+        setChamaStats(stats);
+      } catch (chamaErr) {
+        console.log('Chama stats not available:', chamaErr);
+        // Don't fail dashboard if chama stats aren't available
       }
     } catch (err: any) {
       console.error("Error fetching dashboard data:", err);
@@ -182,6 +193,61 @@ const AdminDashboard: React.FC = () => {
       )}
 
       <StatsCards />
+
+      {chamaStats && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <Link
+            to="/admin/chamas"
+            className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">Total Chama Groups</p>
+                <p className="text-3xl font-bold text-gray-900">{chamaStats.totalChamas || 0}</p>
+              </div>
+              <div className="bg-purple-500 p-3 rounded-full shadow-sm">
+                <PiggyBank className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </Link>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">Active Groups</p>
+                <p className="text-3xl font-bold text-green-600">{chamaStats.activeChamas || 0}</p>
+              </div>
+              <div className="bg-green-500 p-3 rounded-full shadow-sm">
+                <PiggyBank className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">Total Members</p>
+                <p className="text-3xl font-bold text-blue-600">{chamaStats.totalMembers || 0}</p>
+              </div>
+              <div className="bg-blue-500 p-3 rounded-full shadow-sm">
+                <Users className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-1">Total Contributions</p>
+                <p className="text-2xl font-bold text-yellow-600">KES {(chamaStats.totalContributions || 0).toLocaleString()}</p>
+              </div>
+              <div className="bg-yellow-500 p-3 rounded-full shadow-sm">
+                <ShoppingCart className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">

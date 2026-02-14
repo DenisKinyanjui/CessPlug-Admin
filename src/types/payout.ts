@@ -7,12 +7,18 @@ export interface CommissionRates {
 
 export interface PayoutRequest {
   _id: string;
-  agentId: {
+  agentId?: {
     _id: string;
     name: string;
     email: string;
     phone?: string;
   };
+  chamaId?: {
+    _id: string;
+    name: string;
+    weekNumber?: number;
+  };
+  payoutSource?: 'agent' | 'chama'; // New field to distinguish payout source
   amount: number;
   method: 'mpesa' | 'bank';
   accountDetails: string;
@@ -27,6 +33,7 @@ export interface PayoutRequest {
   notes?: string;
   rejectionReason?: string;
   commissionIds?: string[];
+  chamaContributionIds?: string[]; // For chama payouts
   metadata?: {
     settingsVersion?: string;
     processingFee?: number;
@@ -122,6 +129,8 @@ export interface PayoutSettings {
 export interface PayoutFilter {
   status?: string;
   agentId?: string;
+  chamaId?: string;
+  payoutSource?: 'agent' | 'chama'; // New filter for payout source
   method?: string;
   startDate?: string;
   endDate?: string;
@@ -169,6 +178,63 @@ export interface BulkPayoutAction {
   action: 'approve' | 'pay' | 'reject' | 'hold' | 'release';
   notes?: string;
   rejectionReason?: string;
+}
+
+// ===== CHAMA PAYOUT TYPES =====
+
+export interface ChamaPayout {
+  _id: string;
+  chamaId: {
+    _id: string;
+    name: string;
+  };
+  week: number;
+  recipientId: {
+    _id: string;
+    name: string;
+    email: string;
+    phone: string;
+  };
+  amount: number;
+  status: 'pending' | 'approved' | 'paid' | 'rejected';
+  paymentMethod: 'mpesa' | 'bank';
+  mpesaReference?: string;
+  transactionReference?: string;
+  approvedBy?: {
+    _id: string;
+    name: string;
+  };
+  approvedAt?: string;
+  paidAt?: string;
+  notes?: string;
+  rejectionReason?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChamaPayoutStats {
+  totalChamaPayouts: number;
+  pendingPayouts: number;
+  processedPayouts: number;
+  totalAmount: number;
+  averagePayoutAmount: number;
+  byStatus: {
+    pending: number;
+    approved: number;
+    paid: number;
+    rejected: number;
+  };
+}
+
+export interface ChamaPayoutFilter {
+  chamaId?: string;
+  status?: 'pending' | 'approved' | 'paid' | 'rejected';
+  startDate?: string;
+  endDate?: string;
+  minAmount?: number;
+  maxAmount?: number;
+  page?: number;
+  limit?: number;
 }
 
 export interface PayoutAnalytics {

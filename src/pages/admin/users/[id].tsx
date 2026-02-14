@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit, Mail, Calendar, ShoppingCart, DollarSign, Package, Phone } from 'lucide-react';
 import { getUserById, updateUser } from '../../../services/adminApi';
-import { User, FrontendUser, mapApiUserToFrontend } from '../../../types/User';
+import { FrontendUser, mapApiUserToFrontend } from '../../../types/User';
+import UserChamaMemberships from '../../../components/admin/UserChamaMemberships';
 
 interface Order {
   id: string;
@@ -296,6 +297,8 @@ const UserDetailPage: React.FC = () => {
               </div>
             </div>
           )}
+
+          <UserChamaMemberships memberships={user.chamaMemberships} />
 
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Info</h3>

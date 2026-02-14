@@ -18,11 +18,11 @@ export const useAuth = () => {
 
   const login = async (email: string, password: string) => {
     // Simulate login
-    if (email === 'admin@vinsky.com' && password === 'admin123') {
+    if (email === 'admin@cessplug.com' && password === 'admin123') {
       const userData: User = {
         id: '1',
         name: 'Admin User',
-        email: 'admin@vinsky.com',
+        email: 'admin@cessplug.com',
         role: 'admin',
         avatar: 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=400',
         createdAt: new Date().toISOString(),

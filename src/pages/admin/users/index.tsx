@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, UserCheck, UserX, Crown } from 'lucide-react';
+import { Users, UserCheck, UserX, Crown, PiggyBank } from 'lucide-react';
 import Table from '../../../components/admin/Table';
 import { User } from '../../../types';
 import { getAllUsers, deleteUser } from '../../../services/adminApi';
@@ -40,6 +40,7 @@ const UsersPage: React.FC = () => {
           email: user.email,
           role: user.role,
           avatar: user.avatar,
+          chamaMemberships: user.chamaMemberships, // Add chama memberships
           createdAt: user.createdAt,
           status: user.isActive ? 'active' as const : 'inactive' as const
         }));
@@ -121,6 +122,22 @@ const UsersPage: React.FC = () => {
           {new Date(value).toLocaleDateString()}
         </span>
       )
+    },
+    {
+      key: 'chamaMemberships',
+      label: 'Chama Groups',
+      render: (value: any) => {
+        const memberships = value as any[] | undefined;
+        if (!memberships || memberships.length === 0) {
+          return <span className="text-gray-400 text-sm">None</span>;
+        }
+        return (
+          <div className="flex items-center gap-2">
+            <PiggyBank className="h-4 w-4 text-purple-600" />
+            <span className="text-sm font-medium">{memberships.length}</span>
+          </div>
+        );
+      }
     }
   ];
 

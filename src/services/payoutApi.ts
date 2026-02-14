@@ -280,3 +280,85 @@ export const getPayoutRequestDetails = async (
   
   return response.data;
 };
+
+// ===== CHAMA-BASED PAYOUT FUNCTIONS =====
+
+// Get all chama payouts
+export const getChamaPayouts = async (
+  filters?: { chamaId?: string; status?: string; page?: number; limit?: number }
+): Promise<{ success: boolean; data: any[] }> => {
+  const params = new URLSearchParams();
+  if (filters?.chamaId) params.append('chamaId', filters.chamaId);
+  if (filters?.status) params.append('status', filters.status);
+  if (filters?.page) params.append('page', filters.page.toString());
+  if (filters?.limit) params.append('limit', filters.limit.toString());
+
+  const response = await axiosInstance.get(`/api/admin/chamas/payouts?${params}`, {
+    isAdmin: true
+  });
+
+  return response.data;
+};
+
+// Get payouts for a specific chama
+export const getChamaGroupPayouts = async (
+  chamaId: string,
+  filters?: { status?: string; week?: number }
+): Promise<{ success: boolean; data: any[] }> => {
+  const params = new URLSearchParams();
+  if (filters?.status) params.append('status', filters.status);
+  if (filters?.week) params.append('week', filters.week.toString());
+
+  const response = await axiosInstance.get(
+    `/api/admin/chamas/${chamaId}/payouts?${params}`,
+    { isAdmin: true }
+  );
+
+  return response.data;
+};
+
+// Approve chama payout
+export const approveChamaPayout = async (
+  chamaId: string,
+  week: number
+): Promise<{ success: boolean; message: string; data?: any }> => {
+  const response = await axiosInstance.post(
+    `/api/admin/chamas/${chamaId}/payouts/approve`,
+    { week },
+    { isAdmin: true }
+  );
+
+  return response.data;
+};
+
+// Process chama payout
+export const processChamaPayout = async (
+  chamaId: string,
+  week: number,
+  mpesaRef: string
+): Promise<{ success: boolean; message: string; data?: any }> => {
+  const response = await axiosInstance.post(
+    `/api/admin/chamas/${chamaId}/payouts/process`,
+    { week, mpesaRef },
+    { isAdmin: true }
+  );
+
+  return response.data;
+};
+
+// Get chama payout statistics
+export const getChamaPayoutStats = async (): Promise<{
+  success: boolean;
+  data: {
+    totalChamaPayouts: number;
+    pendingPayouts: number;
+    processedPayouts: number;
+    totalAmount: number;
+  };
+}> => {
+  const response = await axiosInstance.get('/api/admin/chamas/payouts/stats', {
+    isAdmin: true
+  });
+
+  return response.data;
+};
