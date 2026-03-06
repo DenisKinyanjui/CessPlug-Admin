@@ -30,10 +30,10 @@ const EditChama = () => {
       const chama = data.chama;
       setOriginalData(chama);
       setFormData({
-        name: chama.name,
-        description: chama.description,
-        weeklyContribution: chama.weeklyContribution.toString(),
-        totalWeeks: chama.totalWeeks.toString(),
+        name: chama.name || '',
+        description: chama.description || '',
+        weeklyContribution: (chama.weeklyContribution ?? '').toString(),
+        totalWeeks: (chama.totalWeeks ?? '').toString(),
       });
     } catch (err: any) {
       setError(err.message || 'Failed to load chama details');
@@ -116,10 +116,10 @@ const EditChama = () => {
   }
 
   const hasChanges = JSON.stringify(formData) !== JSON.stringify({
-    name: originalData.name,
-    description: originalData.description,
-    weeklyContribution: originalData.weeklyContribution.toString(),
-    totalWeeks: originalData.totalWeeks.toString(),
+    name: originalData.name || '',
+    description: originalData.description || '',
+    weeklyContribution: (originalData.weeklyContribution ?? '').toString(),
+    totalWeeks: (originalData.totalWeeks ?? '').toString(),
   });
 
   return (

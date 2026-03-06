@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Trash2, Search } from 'lucide-react';
-import { getChamaById, addMemberToChama, removeMemberFromChama } from '../../../services/chamaApi';
+import { ArrowLeft, Plus, Trash2, Search, Edit2 } from 'lucide-react';
+import { getChamaById, addMemberToChama, removeMemberFromChama, updateMemberPosition } from '../../../services/chamaApi';
 import { getAllUsers } from '../../../services/adminApi';
 import Table from '../../../components/admin/Table';
 
@@ -18,6 +18,10 @@ const ChamaMembersManagement = () => {
   const [selectedPosition, setSelectedPosition] = useState('');
   const [positionError, setPositionError] = useState('');
   const [usersLoading, setUsersLoading] = useState(false);
+  const [editingMember, setEditingMember] = useState<any>(null);
+  const [editPosition, setEditPosition] = useState('');
+  const [editError, setEditError] = useState('');
+  const [editSubmitting, setEditSubmitting] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -88,6 +92,31 @@ const ChamaMembersManagement = () => {
     }
   };
 
+  const openEditMember = (member: any) => {
+    setEditingMember(member);
+    setEditPosition(member.position?.toString() || '');
+    setEditError('');
+  };
+
+  const handleEditMemberPosition = async () => {
+    if (!editPosition) {
+      setEditError('Please select a position');
+      return;
+    }
+    try {
+      setEditSubmitting(true);
+      await updateMemberPosition(id!, editingMember.userId, editPosition);
+      setEditingMember(null);
+      setEditPosition('');
+      setEditError('');
+      fetchChama();
+    } catch (error: any) {
+      setEditError(error.message || 'Failed to update position');
+    } finally {
+      setEditSubmitting(false);
+    }
+  };
+
   const handleRemoveMember = async (userId: string) => {
     if (!confirm('Are you sure you want to remove this member?')) return;
     try {
@@ -129,12 +158,20 @@ const ChamaMembersManagement = () => {
       key: 'actions',
       label: 'Actions',
       render: (_: any, member: any) => (
-        <button
-          onClick={() => handleRemoveMember(member._id || member.id)}
-          className="text-red-600 hover:text-red-800 font-medium flex items-center gap-1"
-        >
-          <Trash2 size={16} /> Remove
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => openEditMember(member)}
+            className="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1"
+          >
+            <Edit2 size={16} /> Edit
+          </button>
+          <button
+            onClick={() => handleRemoveMember(member.userId)}
+            className="text-red-600 hover:text-red-800 font-medium flex items-center gap-1"
+          >
+            <Trash2 size={16} /> Remove
+          </button>
+        </div>
       )
     }
   ];
@@ -279,6 +316,55 @@ const ChamaMembersManagement = () => {
                   className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
                 >
                   Add Member
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Member Position Modal */}
+      {editingMember && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold mb-1">Edit Member Position</h2>
+            <p className="text-gray-600 text-sm mb-4">{editingMember.name}</p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Position (1-10)</label>
+                <select
+                  value={editPosition}
+                  onChange={(e) => { setEditPosition(e.target.value); setEditError(''); }}
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">-- Select position --</option>
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((pos) => (
+                    <option key={pos} value={pos.toString()}>
+                      Position {pos}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {editError && (
+                <div className="p-2 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+                  {editError}
+                </div>
+              )}
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => { setEditingMember(null); setEditPosition(''); setEditError(''); }}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditMemberPosition}
+                  disabled={!editPosition || editSubmitting}
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                >
+                  {editSubmitting ? 'Saving...' : 'Save Position'}
                 </button>
               </div>
             </div>

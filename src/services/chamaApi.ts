@@ -124,6 +124,16 @@ export const addMemberToChama = async (chamaId: string, userId: string, position
   }
 };
 
+// Update member position in chama
+export const updateMemberPosition = async (chamaId: string, userId: string, position: string) => {
+  try {
+    const response = await axiosInstance.put(`/admin/chamas/${chamaId}/members/${userId}`, { position });
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
+};
+
 // Remove member from chama
 export const removeMemberFromChama = async (chamaId: string, userId: string) => {
   try {
