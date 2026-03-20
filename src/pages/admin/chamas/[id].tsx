@@ -58,26 +58,38 @@ const ChamaDetail = () => {
     );
   }
 
+  const totalPool = (chama.weeklyContribution || 0) * (chama.members?.length || 0);
+
   const stats = [
     {
       label: 'Total Members',
       value: chama.members?.length || 0,
-      icon: <Users className="text-blue-500" size={24} />
+      icon: <Users className="text-blue-500" size={24} />,
+      highlight: false
     },
     {
       label: 'Weekly Contribution',
       value: `KES ${chama.weeklyContribution?.toLocaleString()}`,
-      icon: <TrendingUp className="text-green-500" size={24} />
+      icon: <TrendingUp className="text-green-500" size={24} />,
+      highlight: false
+    },
+    {
+      label: 'Total Pool (Redeemable)',
+      value: `KES ${totalPool.toLocaleString()}`,
+      icon: <TrendingUp className="text-emerald-500" size={24} />,
+      highlight: true
     },
     {
       label: 'Current Week',
       value: `${chama.currentWeek}/${chama.totalWeeks}`,
-      icon: <TrendingUp className="text-purple-500" size={24} />
+      icon: <TrendingUp className="text-purple-500" size={24} />,
+      highlight: false
     },
     {
       label: 'Status',
       value: chama.status.charAt(0).toUpperCase() + chama.status.slice(1),
-      icon: null
+      icon: null,
+      highlight: false
     }
   ];
 
@@ -123,13 +135,13 @@ const ChamaDetail = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {stats.map((stat, idx) => (
-          <div key={idx} className="bg-white rounded-lg shadow-md p-6">
+          <div key={idx} className={`rounded-lg shadow-md p-6 ${stat.highlight ? 'bg-emerald-50 border border-emerald-200' : 'bg-white'}`}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">{stat.label}</p>
-                <p className="text-2xl font-bold mt-2">{stat.value}</p>
+                <p className={`text-sm ${stat.highlight ? 'text-emerald-700 font-medium' : 'text-gray-600'}`}>{stat.label}</p>
+                <p className={`text-2xl font-bold mt-2 ${stat.highlight ? 'text-emerald-900' : ''}`}>{stat.value}</p>
               </div>
               {stat.icon && <div className="text-3xl">{stat.icon}</div>}
             </div>
@@ -184,6 +196,11 @@ const ChamaDetail = () => {
               <div>
                 <p className="text-gray-600">Weekly Contribution</p>
                 <p className="text-lg font-semibold">KES {chama.weeklyContribution?.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-gray-600">Total Pool (Redeemable per turn)</p>
+                <p className="text-lg font-semibold text-emerald-700">KES {totalPool.toLocaleString()}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{chama.members?.length || 0} members × KES {chama.weeklyContribution?.toLocaleString()} each</p>
               </div>
             </div>
             <div>

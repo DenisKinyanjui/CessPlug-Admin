@@ -501,7 +501,20 @@ const OrderDetailPage: React.FC = () => {
                 <CreditCard className="h-4 sm:h-5 w-4 sm:w-5 text-gray-400 mr-2 sm:mr-3" />
                 <div>
                   <p className="text-xs sm:text-sm text-gray-600">Payment Method</p>
-                  <p className="text-sm sm:text-base font-medium capitalize">{order.paymentMethod}</p>
+                  {(order as any).useChamaCredit ? (
+                    <div className="flex flex-wrap gap-1 mt-0.5">
+                      <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        Chama Credit
+                      </span>
+                      {order.totalPrice > 0 && (
+                        <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                          + M-Pesa
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="text-sm sm:text-base font-medium capitalize">{order.paymentMethod}</p>
+                  )}
                 </div>
               </div>
               {order.isPaid && order.paidAt && (
@@ -563,8 +576,14 @@ const OrderDetailPage: React.FC = () => {
                 <span>Tax</span>
                 <span>Ksh {order.taxPrice.toFixed(2)}</span>
               </div>
+              {(order as any).useChamaCredit && (order as any).chamaAmountRedeemed > 0 && (
+                <div className="flex justify-between text-green-700 font-medium">
+                  <span>Chama Credit</span>
+                  <span>- Ksh {((order as any).chamaAmountRedeemed as number).toFixed(2)}</span>
+                </div>
+              )}
               <div className="flex justify-between pt-1.5 sm:pt-2 border-t border-gray-200 font-medium">
-                <span>Total</span>
+                <span>{(order as any).useChamaCredit && order.totalPrice > 0 ? 'Paid via M-Pesa' : 'Total'}</span>
                 <span>Ksh {order.totalPrice.toFixed(2)}</span>
               </div>
             </div>

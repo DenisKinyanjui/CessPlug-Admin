@@ -45,6 +45,15 @@ const ChamaManagement = () => {
       render: (value: any) => `KES ${value.toLocaleString()}`
     },
     {
+      key: 'weeklyContribution',
+      label: 'Pool Amount',
+      render: (value: any, row: any) => (
+        <span className="font-semibold text-green-700">
+          KES {(value * (row.members?.length || 0)).toLocaleString()}
+        </span>
+      )
+    },
+    {
       key: 'currentWeek',
       label: 'Progress',
       render: (value: any, row: any) => `${value}/${row.totalWeeks}`

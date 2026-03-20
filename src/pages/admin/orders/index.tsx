@@ -110,8 +110,21 @@ const OrdersPage: React.FC = () => {
     {
       key: 'paymentMethod',
       label: 'Payment',
-      render: (value: string) => (
-        <span className="capitalize text-xs sm:text-sm">{value}</span>
+      render: (value: string, row: Order) => (
+        row.useChamaCredit ? (
+          <div className="flex flex-col gap-1">
+            <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+              Chama Credit
+            </span>
+            {row.totalPrice > 0 && (
+              <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                + M-Pesa
+              </span>
+            )}
+          </div>
+        ) : (
+          <span className="capitalize text-xs sm:text-sm">{value}</span>
+        )
       )
     },
     {
